@@ -1,0 +1,28 @@
+---
+  # puppet-master.dev attributes
+
+  ## Class: puppetmaster
+
+  puppetmaster::config::serv_name: 'puppetserver'
+  puppetmaster::config::ensure: 'present'
+  puppetmaster::config::host_alias: 'puppet'
+  puppetmaster::config::hosts_file: '/etc/hosts'
+  puppetmaster::config::server_defaults:
+    path: '/etc/default/puppetserver'
+    line: 'JAVA_ARGS="-Xms1g -Xmx1g -XX:MaxPermSize=256m"'
+    match: "^JAVA_ARGS=.*$"
+  puppetmaster::config::puppet_conf:
+    path: '/etc/puppet/puppet.conf'
+    line: "autosign = true"
+  puppetmaster::config::autosign_conf:
+    path: '/etc/puppetlabs/puppetserver/conf.d/autosign.conf'
+    content: 'puppet-agent.dev'
+    mode: '0644'
+
+
+  puppetmaster::install::ensure: 'latest'
+  puppetmaster::install::pkg_name: 'puppetserver'
+
+  puppetmaster::service::ensure: 'running'
+  puppetmaster::service::enable: true
+  puppetmaster::service::serv_name: 'puppetserver'

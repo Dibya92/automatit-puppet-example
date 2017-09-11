@@ -1,0 +1,44 @@
+---
+  # puppet-agent.dev attributes
+
+  ## Class: puppetagent
+  puppetagent::config::ensure: 'present'
+  puppetagent::config::host_alias: 'agent'
+  puppetagent::config::hosts_file: '/etc/hosts'
+
+  puppetagent::install::ensure: 'latest'
+  puppetagent::install::pkg_name: 'puppet-agent'
+
+  puppetagent::service::ensure: 'running'
+  puppetagent::service::enable: true
+  puppetagent::service::serv_name: 'puppet'
+
+  ## Class: task_tomcat
+  task_tomcat::config::instance: 'default'
+  task_tomcat::config::catalina_home: '/opt/tomcat'
+
+  task_tomcat::install:location: '/opt/tomcat'
+  task_tomcat::install::src_url: 'https://www-us.apache.org/dist/tomcat/tomcat-9/v9.0.0.M26/bin/apache-tomcat-9.0.0.M26.tar.gz'
+
+  task_tomcat::service::serv_name: 'tomcat'
+  task_tomcat::service::provider: 'systemd'
+  task_tomcat::service::ensure: 'running'
+  task_tomcat::service::start: '/opt/tomcat/bin/startup.sh'
+  task_tomcat::service::stop: '/opt/tomcat/bin/shutdown.sh'
+  task_tomcat::service::hasstatus: false
+  task_tomcat::service::hasrestart: false
+
+  ## Class: task_apache
+  task_apache::config::port: 80
+  task_apache::config::docroot: '/opt/tomcat/webapps'
+  task_apache::config::proxy_pass:
+    path: '/'
+    url: 'balancer://puppet00/'
+  task_apache::config::lb: 'puppet00'
+  task_apache::config::node_proto: 'ajp'
+  task_apache::config::node_port: 8009
+  task_apache::config::opts:
+    - 'ping=5'
+    - 'disablereuse=on'
+    - 'retry=5'
+    - 'ttl=120'

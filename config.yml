@@ -1,0 +1,35 @@
+---
+vagrant:
+  setup:
+    box: 'ubuntu/xenial64'
+    net:
+      internal: 'private_network'
+  vms:
+    puppet-master.dev:
+      alias: puppet
+      memory: 2048
+      bootstrap:
+        - 'puppet.sh'
+        - 'r10k.sh'
+      ip: '172.16.100.100'
+      puppet:
+        manifests_path: 'manifests'
+        modules_path: 'modules'
+        hiera_path: 'hieradata'
+        manifest_file: 'default.pp'
+        synced_folders:
+          modules: '/etc/puppetlabs/code/environments/production/modules'
+          manifests: '/etc/puppetlabs/code/environments/production/manifests'
+          hiera: '/etc/puppetlabs/code/environments/production/hieradata'
+    puppet-agent.dev:
+      alias: agent
+      memory: 512
+      bootstrap:
+        - 'puppet.sh'
+      ip: '172.16.100.101'
+      puppet:
+        puppet_server: 'puppet-master.dev'
+        puppet_node: 'puppet-agent.dev'
+      ports:
+        guest: 80
+        host: 80

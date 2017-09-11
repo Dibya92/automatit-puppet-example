@@ -5,8 +5,8 @@
  - puppet agent (v4.10.7)
 
  * Puppet agent VM is a target for custom installation of:
-  - apache web server
-  - tomcat application server
+    - apache web server
+    - tomcat application server
 
   * Service discovery is available via vagrant-hostmanager plugin.
 
@@ -27,7 +27,6 @@
 │   ├── puppetmaster
 │   ├── task_apache
 │   ├── task_tomcat
-│   └── tomcat
 ├── Puppetfile  - puppet modules, vendor dependencies
 ├── puppet.sh   - initial shell provisioner (adds puppet repo & dependencies)
 ├── r10k.sh     - r10k shell provisioner (adds puppetfile support)
